@@ -1,0 +1,86 @@
+/*
+Please note that it's Function problem i.e.
+you need to write your solution in the form of Function(s) only.
+Driver Code to call/invoke your function would be added by GfG's Online Judge.*/
+
+
+class GfG
+{
+    int wildCard(String pattern, String str)
+    {
+        char[] ptr=pattern.toCharArray();
+        
+    /*    for(int i=0;i<pattern.length();i++)
+       {
+           System.out.print(ptr[i]);
+       }*/
+       //System.out.println();
+        int ptrIndex=0;
+        boolean isFirstStar=true;
+        
+        //if there are multiple * reduce it
+        for(int i=0;i<pattern.length();i++)
+        {
+           if (ptr[i] == '*') {
+                if (isFirstStar) {
+                    ptr[ptrIndex++] = ptr[i];
+                    isFirstStar = false;
+                }
+            } else {
+                ptr[ptrIndex++] = ptr[i];
+                isFirstStar = true;
+            }
+        }
+       /* System.out.println("resduced :");
+       for(int i=0;i<ptrIndex;i++)
+       {
+           System.out.print(ptr[i]);
+       }*/
+       
+       //make boolean matrix to match each character of given text with pattern
+       boolean[][] T=new boolean[str.length()+1][ptrIndex+1];
+       
+       
+        
+        for(int i=0;i<str.length();i++)
+       {
+           Arrays.fill(T[i],false);
+       }
+        if(ptr[0]=='*')  // if first character of pattern is * 
+           T[0][1]=true;
+        
+        T[0][0]=true; //as empty string matches with empty string
+        
+        for(int i=1;i<=str.length();i++)
+        {
+            for(int j=1;j<=ptrIndex;j++)
+            {
+                if(ptr[j-1]=='?' || ptr[j-1]==str.charAt(i-1))//case1
+                  T[i][j]=T[i-1][j-1];
+                 
+                else if(ptr[j-1]=='*') //case 2
+                {
+                    T[i][j]=T[i][j-1] || T[i-1][j];
+                }
+            }
+        }
+        
+     /*   for(int i=0;i<=str.length();i++)
+        {
+            
+            for(int j=0;j<=ptrIndex;j++)
+            {
+                System.out.print(T[i][j]+" ");
+            }
+            System.out.println();
+        }
+       */ 
+       if(T[str.length()][ptrIndex]==true)
+        return 1;
+        else
+        return 0;
+        
+   // return 0;    
+    }
+    
+}
